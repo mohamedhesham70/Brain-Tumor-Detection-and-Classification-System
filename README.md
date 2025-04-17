@@ -1,58 +1,74 @@
 # Brain-Tumor-Detection-and-Classification-System
 
-Tools:
+🛠️ Tools Used
+Deep Learning Frameworks:
+TensorFlow, Keras, Ultralytics (YOLOv8)
 
-Deep Learning Frameworks: TensorFlow, Keras, Ultralytics (YOLOv8)
+Backend & Deployment:
+Flask (API-like endpoints), HTML/CSS/JavaScript (Frontend)
 
-Backend & Deployment: Flask (API-like endpoints), HTML/CSS/JavaScript (Frontend)  
+Image Processing:
+PIL
 
-Image Processing: PIL
+Data Augmentation & Training:
+ImageDataGenerator
 
-Data Augmentation & Training: ImageDataGenerator
+Model Architectures:
+VGG16 (Classification), YOLOv8 (Object Detection)
 
-Model Architectures: VGG16 (Classification), YOLOv8 (Object Detection)
+Additional Tools:
+NumPy, Pandas, Matplotlib, Seaborn
 
-Additional Tools: NumPy, Pandas, Matplotlib, Seaborn
+🧠 Project Description
+Developed an end-to-end brain tumor diagnosis system using MRI scans, combining classification and object detection to support medical decision-making.
 
-Description:
-Developed an end-to-end system for brain tumor diagnosis using MRI scans, combining classification and object detection models to enhance medical decision-making:
+🔍 VGG16 – Tumor Classification
+Trained a VGG16-based CNN to classify MRI images into "Tumor" or "No Tumor"
+→ Achieved 98% accuracy on test data.
 
-VGG16 Classification Model
+Integrated data augmentation techniques: rotation, flipping, shifting.
 
-Trained a VGG16-based CNN to classify MRI images into "Tumor" or "No Tumor" with 98% accuracy on test data.
+Deployed via Flask: Processes user-uploaded images and returns immediate classification results.
 
-Integrated data augmentation (rotation, flipping, shifting) to improve generalization.
+🎯 YOLOv8 – Tumor Detection & Subtype Classification
+Fine-tuned YOLOv8n on a custom-labeled dataset to:
 
-Deployed via Flask to process user-uploaded images and return immediate binary results.
+Localize tumors.
 
-YOLOv8 Tumor Detection & Subtype Classification
+Classify into Glioma, Meningioma, or Pituitary Tumor.
 
-Fine-tuned YOLOv8n on a custom dataset to localize tumors and classify them into three subtypes:
+Results:
 
-Glioma | Meningioma | Pituitary Tumor
+92.2% mAP50
 
-Achieved 92.2% mAP50 and 71.3% mAP50-95 on validation data, with real-time bounding box visualization.
+71.3% mAP50-95 (on validation data)
 
-Integrated Flask Application (app.py)
+Real-time bounding box visualizations for medical interpretability.
 
-Built a pipeline where VGG16 acts as a first-stage filter:
+🧩 Integrated Flask Application (app.py)
+Built a smart pipeline:
 
-If "No Tumor", returns immediate result.
+If image is "No Tumor" → return result immediately.
 
-If "Tumor", triggers YOLOv8 to pinpoint tumor location and identify subtype.
+If image is "Tumor" → trigger YOLOv8 to detect tumor location & subtype.
 
-Designed a user-friendly interface with dynamic result displays using HTML/CSS/JavaScript.
+Designed a user-friendly interface using HTML/CSS/JavaScript with dynamic result rendering.
 
-Key Achievements:
-Reduced false positives by cascading models (VGG16 first-pass → YOLOv8 detailed analysis).
+🌟 Key Achievements
+✅ Reduced false positives by cascading models:
+VGG16 (first-pass) → YOLOv8 (detailed detection)
 
-Enabled interpretability with bounding box visualizations for clinical use cases.
+✅ Enhanced interpretability with visual bounding boxes for clinical insights.
 
-Optimized model inference speed (under 100ms per prediction) for practical deployment.
+✅ Optimized inference speed to < 100ms per prediction for real-time usage.
 
-Technical Highlights:
-Model Optimization: Used transfer learning, early stopping, and dropout layers to prevent overfitting.
+⚙️ Technical Highlights
+Model Optimization:
+Used transfer learning, early stopping, and dropout layers to reduce overfitting.
 
-Data Pipeline: Automated dataset splitting (70% train, 15% validation, 15% test) and preprocessing.
+Data Pipeline:
+Automated dataset splitting (70% Train, 15% Validation, 15% Test) and preprocessing.
 
-Scalability: Modular code structure allows easy integration of newer models (e.g., YOLOv9).
+Scalability:
+Modular code design allows easy integration of future models (e.g., YOLOv9).
+
