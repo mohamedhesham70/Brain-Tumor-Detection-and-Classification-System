@@ -1,0 +1,7 @@
+train: D:\Projects\Brain Tumor\YOLOV8\train\images
+val: D:\Projects\Brain Tumor\YOLOV8\valid\images
+test: D:\Projects\Brain Tumor\YOLOV8\test\images
+
+nc: 3
+names: ['glioma', 'meningioma', 'pituitary']
+
