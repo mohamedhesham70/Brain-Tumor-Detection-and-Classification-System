@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brain Tumor Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            text-align: center;
+            padding-top: 30px;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 60%;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        img {
+            max-width: 90%;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        table, th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #detectionTable {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Brain Tumor Detection</h2>
+
+        <input type="file" id="imageInput" onchange="previewImage()">
+        <br>
+        <img id="preview" style="display:none;">
+        <br>
+        <button class="btn" onclick="predict()">Predict</button>
+
+        <div class="result" id="resultText"></div>
+
+        <img id="detectionImage" style="display:none;">
+        
+        <div id="detectionTable">
+            <h3>Tumor Detection Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tumor Type</th>
+                        <th>Confidence</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let uploadedPath = "";
+
+        function previewImage() {
+            const input = document.getElementById("imageInput");
+            const file = input.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById("preview");
+                img.src = e.target.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+
+            // Upload the file to server
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                uploadedPath = data.filepath;
+            });
+        }
+
+        function predict() {
+            if (!uploadedPath) {
+                alert("Please select and upload an image first.");
+                return;
+            }
+
+            fetch("/predict", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ image_path: uploadedPath })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const resultDiv = document.getElementById("resultText");
+                resultDiv.innerText = "Classification: " + data.classification;
+
+                if (data.classification === "No Tumor") {
+                    document.getElementById("detectionImage").style.display = "none";
+                    document.getElementById("detectionTable").style.display = "none";
+                } else {
+                    document.getElementById("detectionImage").src = data.detection_image;
+                    document.getElementById("detectionImage").style.display = "block";
+
+                    const tableBody = document.getElementById("tableBody");
+                    tableBody.innerHTML = "";
+                    data.detections.forEach(d => {
+                        const row = `<tr><td>${d.name}</td><td>${(d.confidence * 100).toFixed(2)}%</td></tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                    document.getElementById("detectionTable").style.display = "block";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
