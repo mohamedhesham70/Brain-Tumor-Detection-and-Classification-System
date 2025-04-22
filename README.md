@@ -1,74 +1,114 @@
-# Brain-Tumor-Detection-and-Classification-System
+## Brain-Tumor-Detection-and-Classification-System
 
-🛠️ Tools Used
-Deep Learning Frameworks:
-TensorFlow, Keras, Ultralytics (YOLOv8)
+# 🧠 Brain Tumor Detection and Classification System
 
-Backend & Deployment:
-Flask (API-like endpoints), HTML/CSS/JavaScript (Frontend)
+This project presents a powerful **AI-based system** that leverages **two deep learning models — VGG16 & YOLOv8** — to **classify, detect, and localize brain tumors** from MRI images.
 
-Image Processing:
-PIL
+---
 
-Data Augmentation & Training:
-ImageDataGenerator
+## 🔍 System Pipeline Overview
 
-Model Architectures:
-VGG16 (Classification), YOLOv8 (Object Detection)
+The system follows a **two-stage workflow**:
 
-Additional Tools:
-NumPy, Pandas, Matplotlib, Seaborn
+1. 🎯 **Classification (VGG16)** – Determines if a brain tumor exists (Binary classification: Tumor / No Tumor).
+2. 🎯 **Detection & Typing (YOLOv8)** – Locates the tumor and classifies it as:
+   - Glioma
+   - Meningioma
+   - Pituitary
 
-🧠 Project Description
-Developed an end-to-end brain tumor diagnosis system using MRI scans, combining classification and object detection to support medical decision-making.
+---
 
-🔍 VGG16 – Tumor Classification
-Trained a VGG16-based CNN to classify MRI images into "Tumor" or "No Tumor"
-→ Achieved 98% accuracy on test data.
+## ✅ Stage 1: Tumor Classification using VGG16
 
-Integrated data augmentation techniques: rotation, flipping, shifting.
+### 🔸 Purpose:
+- Binary classification of MRI images.
 
-Deployed via Flask: Processes user-uploaded images and returns immediate classification results.
+### 🔸 Highlights:
+- Transfer learning from ImageNet.
+- Final layers fine-tuned for tumor detection.
+- Achieved **97.56% accuracy** on test data.
 
-🎯 YOLOv8 – Tumor Detection & Subtype Classification
-Fine-tuned YOLOv8n on a custom-labeled dataset to:
+### 🔸 Model Architecture:
+```python
+Sequential([
+    base_model,  # VGG16 without top layers
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dropout(0.5),
+    Dense(1, activation='sigmoid')
+])
+```
 
-Localize tumors.
+### 🔸 Training Details:
+- Optimizer: Adam  
+- Loss: Binary Crossentropy  
+- Early Stopping: Enabled (patience=5)  
+- Max Epochs: 20
 
-Classify into Glioma, Meningioma, or Pituitary Tumor.
+---
 
-Results:
+## ✅ Stage 2: Tumor Detection & Classification using YOLOv8
 
-92.2% mAP50
+### 🔸 Purpose:
+- Localize and classify tumor types with bounding boxes.
 
-71.3% mAP50-95 (on validation data)
+### 🔸 Model Info:
+- Pre-trained **YOLOv8n**, fine-tuned on MRI tumor dataset.
+- Training:
+  - Epochs: 70
+  - Optimizer: AdamW
+  - LR: 0.001
+  - Early stopping: patience=15
 
-Real-time bounding box visualizations for medical interpretability.
+### 🔸 Performance:
+- **mAP50: 92.1%**
+  - Glioma: 83.4%
+  - Meningioma: 97.7%
+  - Pituitary: 95.3%
 
-🧩 Integrated Flask Application (app.py)
-Built a smart pipeline:
+---
 
-If image is "No Tumor" → return result immediately.
+## 💻 Web App Integration (Flask-Based)
 
-If image is "Tumor" → trigger YOLOv8 to detect tumor location & subtype.
+### 🧭 Workflow:
+1. User uploads an MRI image.
+2. VGG16 processes the image:
+   - **No Tumor?** → Result shown.
+   - **Tumor?** → Image sent to YOLOv8.
+3. YOLOv8:
+   - Draws bounding boxes.
+   - Classifies tumor type.
+4. Frontend displays results.
 
-Designed a user-friendly interface using HTML/CSS/JavaScript with dynamic result rendering.
+### 🛠️ Components:
+- `app.py`: Flask backend (file upload + model integration)
+- `index.html`: Frontend UI (clean and responsive)
 
-🌟 Key Achievements
-✅ Reduced false positives by cascading models:
-VGG16 (first-pass) → YOLOv8 (detailed detection)
+---
 
-✅ Enhanced interpretability with visual bounding boxes for clinical insights.
+## 📋 Example Output
 
-✅ Optimized inference speed to < 100ms per prediction for real-time usage.
+- ✅ Prediction: Tumor Detected  
+- 🧠 Type: Meningioma  
+- 📍 Bounding Box: Shown on image  
+- 📊 Confidence: 97.7%
 
-⚙️ Technical Highlights
-Model Optimization:
-Used transfer learning, early stopping, and dropout layers to reduce overfitting.
+---
 
-Data Pipeline:
-Automated dataset splitting (70% Train, 15% Validation, 15% Test) and preprocessing.
+## ⚙️ Tech Stack
 
-Scalability:
-Modular code design allows easy integration of future models (e.g., YOLOv9).
+- Python 3.x  
+- TensorFlow / Keras  
+- Ultralytics (YOLOv8)  
+- OpenCV  
+- Flask  
+- Required libs: `requirements.txt`
 
+---
+
+## 🎯 Final Note
+
+This system offers a **powerful AI solution for brain tumor analysis**, combining:
+- **Speed** (real-time detection),
+- **Accuracy** (97%+ classification, 92%+ detection),
+- and **Visualization** (bounding boxes + tumor types).
