@@ -1,4 +1,4 @@
-## Brain-Tumor-Detection-and-Classification-System
+# Brain-Tumor-Detection-and-Classification-System
 
 # 🧠 Brain Tumor Detection and Classification System
 
