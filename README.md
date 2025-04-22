@@ -1,6 +1,6 @@
 # Brain-Tumor-Detection-and-Classification-System
 
-# 🧠 Brain Tumor Detection and Classification System
+## 🧠 Brain Tumor Detection and Classification System
 
 This project presents a powerful **AI-based system** that leverages **two deep learning models — VGG16 & YOLOv8** — to **classify, detect, and localize brain tumors** from MRI images.
 
