@@ -22,20 +22,20 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CLASS_NAMES = ["No Tumor", "Tumor"]
 
 # Resize helper
-def resize_image(image, size=(400, 400)):  # حجم صغير للعرض والأداء
+def resize_image(image, size=(400, 400)):  # Small size for better display and performance
     return cv2.resize(image, size)
 
 # Preprocess for VGG
 def preprocess_image_for_vgg(image_path):
     img = cv2.imread(image_path)
-    img = resize_image(img, (224, 224))
-    img = img / 255.0
+    img = resize_image(img, (224, 224))  # Resize image to fit VGG input
+    img = img / 255.0  # Normalize the image
     return np.expand_dims(img, axis=0)
 
 # YOLO detection
 def run_yolo_detection(image_path):
     image = cv2.imread(image_path)
-    image = resize_image(image, (640, 640))  # YOLO بيشتغل كويس على الحجم ده
+    image = resize_image(image, (640, 640))  # YOLO performs well with this size
     results = yolo_model.predict(source=image, imgsz=640, conf=0.5)
 
     detections = []
@@ -48,7 +48,7 @@ def run_yolo_detection(image_path):
 
     # Annotated image
     annotated = results[0].plot()
-    annotated = resize_image(annotated, (400, 400))  # تصغير الصورة الناتجة
+    annotated = resize_image(annotated, (400, 400))  # Resize annotated image for display
     output_path = os.path.join(app.config['UPLOAD_FOLDER'], 'detected_' + os.path.basename(image_path))
     cv2.imwrite(output_path, annotated)
 
